@@ -47,27 +47,27 @@ const responseHandler = (response: any): AxiosResponse<any> | Promise<any> | any
  */
 const errorHandler = async (error: AxiosError): Promise<AxiosError> => {
   console.error(error);
-  if (error.code === 'ERR_NETWORK') {
-    message.error({
-      content: '网络连接失败',
-      key: AXIOS_ERROR_KEY,
-    });
-  } else if (error.code === 'ERR_CONNECTION_ABORTED') {
-    message.error({
-      content: '网络连接中断',
-      key: AXIOS_ERROR_KEY,
-    });
-  } else if (error.code === 'ERR_TIMEOUT') {
-    message.error({
-      content: '请求超时',
-      key: AXIOS_ERROR_KEY,
-    });
-  } else if (error.code === 'ERR_CONNECTION_REFUSED') {
-    message.error({
-      content: '服务器拒绝连接',
-      key: AXIOS_ERROR_KEY,
-    });
-  }
+  // if (error.code === 'ERR_NETWORK') {
+  //   message.error({
+  //     content: '网络连接失败',
+  //     key: AXIOS_ERROR_KEY,
+  //   });
+  // } else if (error.code === 'ERR_CONNECTION_ABORTED') {
+  //   message.error({
+  //     content: '网络连接中断',
+  //     key: AXIOS_ERROR_KEY,
+  //   });
+  // } else if (error.code === 'ERR_TIMEOUT') {
+  //   message.error({
+  //     content: '请求超时',
+  //     key: AXIOS_ERROR_KEY,
+  //   });
+  // } else if (error.code === 'ERR_CONNECTION_REFUSED') {
+  //   message.error({
+  //     content: '服务器拒绝连接',
+  //     key: AXIOS_ERROR_KEY,
+  //   });
+  // }
 
   // if (error.response) {
   //   const { data, status, statusText } = error.response as AxiosResponse<any>;
