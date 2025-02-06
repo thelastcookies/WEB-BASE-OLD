@@ -26,6 +26,13 @@ interface ImportMetaEnv {
    * 通常开启，在无用户概念的、简单的系统里可以关闭
    */
   readonly APP_LOGIN_ENABLE: 'true' | 'false';
+  /**
+   * 主题模式
+   *   system：跟随系统主题
+   *   light：启用浅色模式
+   *   dark：启用深色模式
+   */
+  readonly APP_THEME: 'system' | 'light' | 'dark';
   readonly APP_API_BASE_URL: string;
   readonly APP_API_ADMIN_URL: string;
   readonly APP_API_MOCK_URL: string;

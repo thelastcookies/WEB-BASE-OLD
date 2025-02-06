@@ -1,6 +1,8 @@
 import 'dayjs/locale/zh-cn';
 import type { Handler } from 'mitt';
 
+const themeMode = import.meta.env.APP_THEME;
+
 /**
  * 主题状态管理
  * 实现动态主题的基本思路是：
@@ -17,12 +19,13 @@ import type { Handler } from 'mitt';
  */
 
 export const useThemeStore = defineStore('theme', () => {
+  // todo 为 dayjs 配置本地化
   // 语言环境，为 Antdv 初始化
   dayjs.locale('zh-cn');
 
   // 主题配色模式
   const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-  const isDarkTheme = ref(darkModeMediaQuery.matches);
+  const isDarkTheme = ref(themeMode === 'system' ? darkModeMediaQuery.matches : themeMode === 'dark');
   const emitter = mitt();
 
   const themeModeChange = (e: MediaQueryListEvent) => {
@@ -41,10 +44,10 @@ export const useThemeStore = defineStore('theme', () => {
     return isDarkTheme.value ? darkToken : defaultToken;
   });
 
-  darkModeMediaQuery.addEventListener('change', themeModeChange);
+  if (themeMode === 'system') darkModeMediaQuery.addEventListener('change', themeModeChange);
 
   tryOnUnmounted(() => {
-    darkModeMediaQuery.removeEventListener('change', themeModeChange);
+    if (themeMode === 'system') darkModeMediaQuery.removeEventListener('change', themeModeChange);
   });
 
   const listenThemeChange = (
