@@ -1,5 +1,5 @@
 import * as echarts from 'echarts/core';
-import { BarChart, LineChart, PieChart, RadarChart } from 'echarts/charts';
+import { BarChart, GaugeChart, LineChart, PieChart, RadarChart } from 'echarts/charts';
 import {
   DatasetComponent,
   DataZoomComponent,
@@ -28,6 +28,7 @@ echarts.use([
   LineChart,
   PieChart,
   RadarChart,
+  GaugeChart,
   // Renderer
   CanvasRenderer,
 ]);
