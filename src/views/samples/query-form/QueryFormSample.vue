@@ -38,6 +38,8 @@ const queryFields: QueryFormField[] = [
     label: '时间',
     field: 'DatePickerName',
     component: 'DatePicker',
+    labelCol: { span: 4 },
+    wrapperCol: { span: 18, offset: 2 },
     compProps: {
       placeholder: '请选择时间',
       valueFormat: 'YYYY-MM-DD',
