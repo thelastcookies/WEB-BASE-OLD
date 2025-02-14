@@ -2,6 +2,7 @@
 import type { QueryFormField } from '@/components/common/query-form/types';
 import type { Rule } from 'ant-design-vue/es/form';
 import type { Recordable } from '@/types';
+import type { Dayjs } from 'dayjs';
 
 const queryFields: QueryFormField[] = [
   {
@@ -54,9 +55,54 @@ const queryFields: QueryFormField[] = [
     label: '起止月份',
     field: 'MonthRangePickerName',
     component: 'RangePicker',
+    colSpan: 4,
+    wrapperCol: { span: 24, offset: 2 },
     compProps: {
       picker: 'month',
       placeholder: ['请选择开始月份', '请选择结束月份'],
+    },
+  },
+  {
+    label: '起止年秒',
+    field: 'TimeRangePickerName',
+    component: 'RangePicker',
+    compProps: {
+      disabledDate: (current: Dayjs) => {
+        return current && (current.isAfter(dayjs(), 'day') || current.isBefore(dayjs().subtract(2, 'month'), 'day'));
+      },
+      disabledTime: (current: Dayjs, type: 'start' | 'end') => {
+        const now = dayjs();
+        if (current && current.isSame(now, 'day')) {
+          return {
+            disabledHours: () => Array.from({ length: 24 }, (_, i) => i).filter((h) => h > now.hour()),
+            disabledMinutes: (hour: number) => {
+              if (hour === now.hour()) {
+                return Array.from({ length: 60 }, (_, i) => i).filter((m) => m > now.minute());
+              }
+              return [];
+            },
+            disabledSeconds: (hour: number, minute: number) => {
+              if (hour === now.hour() && minute === now.minute()) {
+                return Array.from({ length: 60 }, (_, i) => i).filter((s) => s > now.second());
+              }
+              return [];
+            },
+          };
+        }
+        return {};
+      },
+      placeholder: ['请选择开始时间', '请选择结束时间'],
+      showTime: { defaultValue: dayjs('00:00:00', 'HH:mm:ss') },
+      presets: [
+        { label: '近15分钟', value: [dayjs().subtract(15, 'm'), dayjs()] },
+        { label: '近一小时', value: [dayjs().subtract(1, 'h'), dayjs()] },
+        { label: '近八小时', value: [dayjs().subtract(8, 'h'), dayjs()] },
+        { label: '近一天', value: [dayjs().subtract(1, 'd'), dayjs()] },
+        { label: '近三天', value: [dayjs().subtract(3, 'd'), dayjs()] },
+        { label: '近一周', value: [dayjs().subtract(7, 'd'), dayjs()] },
+        { label: '近十五天', value: [dayjs().subtract(15, 'd'), dayjs()] },
+        { label: '近一个月', value: [dayjs().subtract(1, 'M'), dayjs()] },
+      ],
     },
   },
 ];
@@ -66,6 +112,7 @@ const qForm = ref<Recordable<any>>({
   inputName: '1234',
   RangePickerName: [dayjs().subtract(8, 'h'), dayjs()],
   MonthRangePickerName: [dayjs(), dayjs()],
+  TimeRangePickerName: [dayjs().subtract(2, 'hours'), dayjs()],
 });
 const onQuery = (form: Record<string, string>) => {
   qForm.value = form;
@@ -87,6 +134,13 @@ const rules: Record<string, Rule[]> = {
         return Promise.resolve();
       }
       return Promise.reject('起止时间不可跨月');
+    },
+  }],
+  TimeRangePickerName: [{
+    validator(_, value) {
+      if (!value || value.length !== 2) {
+        return Promise.reject('请选择时间范围');
+      } else return Promise.resolve();
     },
   }],
 };
