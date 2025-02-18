@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.25.0](https://github.com/thelastcookies/WEB-BASE/compare/v0.24.0...v0.25.0) (2025-02-18)
+
+
+### Features
+
+* 全局启用 KeepAlive，移除 Parent 组件 ([d226c78](https://github.com/thelastcookies/WEB-BASE/commit/d226c78fd87f47aa17a5c0e8f95257411971a6af))
+* 增加 QueryForm 对查询字段的自定义 ColSpan 支持 ([228f96d](https://github.com/thelastcookies/WEB-BASE/commit/228f96dcb3971b7e91988f540637595284e384f7))
+* 新增主题模式的环境变量配置支持 ([4c70e78](https://github.com/thelastcookies/WEB-BASE/commit/4c70e78daeac430f82de989f2b153abdf81bc005))
+
+
+### Bug Fixes
+
+* 取消全局的网络请求失败提示 ([8d7fd6e](https://github.com/thelastcookies/WEB-BASE/commit/8d7fd6e14574945f9ebee14a14d5d1a7a683651f))
+
 ## [0.24.0](https://github.com/thelastcookies/WEB-BASE/compare/v0.23.0...v0.24.0) (2024-12-24)
 
 
