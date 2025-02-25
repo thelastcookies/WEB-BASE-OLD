@@ -121,7 +121,11 @@ const handleClear = () => {
             help=""
           >
             <template v-if="item.component === 'Input'">
-              <a-input-search v-bind="item.compProps" v-model:value="queryForm[item.field]" />
+              <a-input v-bind="item.compProps" v-model:value="queryForm[item.field]">
+                <template #suffix>
+                  <BaseIcon class="c-black/25" icon="i-mdi-magnify" />
+                </template>
+              </a-input>
             </template>
             <template v-else-if="item.component === 'Select'">
               <BaseSelect v-bind="item.compProps" v-model:value="queryForm[item.field]" />
