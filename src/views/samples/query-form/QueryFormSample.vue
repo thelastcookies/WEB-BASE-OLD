@@ -411,6 +411,48 @@ const sForm = ref<Recordable<any>>({
   apiSelectName: ['1522888670812573696', '1181928860648738816', 'Admin'],
 });
 
+const cascadeFields: QueryFormField[] = [
+  {
+    label: '级联父级—性别',
+    field: 'casSexField',
+    labelCol: { span: 7 },
+    component: 'Select',
+    compProps: {
+      options: [{
+        label: '男',
+        value: 1,
+      }, {
+        label: '女',
+        value: 0,
+      }],
+    },
+  },
+  {
+    label: '级联子级—用户',
+    field: 'casUserField',
+    labelCol: { span: 7 },
+    component: 'Select',
+    compProps: {
+      cascadeParentField: 'casSexField',
+      mode: 'multiple',
+      getOptions: async (form: Recordable<any>) => {
+        if (form.casSexField == null) return;
+        const res = await getUserList({});
+        return res.Data!.filter(user => user.Sex === form.casSexField).map(user => {
+          return {
+            label: user.RealName,
+            value: user.Id,
+          };
+        });
+      },
+    },
+  },
+];
+const casForm = ref<Recordable<any>>({
+  casSexField: 1,
+  casUserField: [],
+});
+
 </script>
 <template>
   <div class="w-full">
@@ -466,6 +508,20 @@ const sForm = ref<Recordable<any>>({
       <div class="pl-8">
         <div class="text-5">SelectableForm</div>
         <div v-for="(value, key) in sForm">{{ key }}: {{ value }}</div>
+      </div>
+    </div>
+    <a-divider>级联选择器</a-divider>
+    <div class="p-8">
+      <QueryForm
+        :expand="true"
+        :fields="cascadeFields"
+        v-model:form="casForm"
+      ></QueryForm>
+    </div>
+    <div class="w-full flex p-8">
+      <div class="pl-8">
+        <div class="text-5">CascadeForm</div>
+        <div v-for="(value, key) in casForm">{{ key }}: {{ value }}</div>
       </div>
     </div>
   </div>

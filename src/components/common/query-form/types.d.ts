@@ -16,5 +16,7 @@ export interface QueryFormField {
   colSpan?: string | number;
   labelCol?: ColProps;
   wrapperCol?: ColProps;
-  compProps?: any;
+  compProps?: {
+    cascadeParentField?: string;
+  } & any;
 }

@@ -1,9 +1,11 @@
 <script setup lang="tsx">
 import type { DefaultOptionType, LabeledValue, SelectValue } from 'ant-design-vue/es/select';
 import type { CheckboxChangeEvent } from 'ant-design-vue/es/checkbox/interface';
+import type { Recordable } from '@/types';
 
 type RawValue = string | number;
 
+const form = defineModel<Recordable<any>>('form');
 const value = defineModel<SelectValue>('value');
 const _options = ref<DefaultOptionType[]>();
 
@@ -11,7 +13,7 @@ const attrs = useAttrs();
 
 const getOptions = async () => {
   if (attrs.getOptions instanceof Function) {
-    _options.value = await attrs.getOptions();
+    _options.value = await attrs.getOptions(form.value);
   } else if (attrs.options instanceof Array) {
     _options.value = attrs.options;
   } else {
@@ -19,6 +21,14 @@ const getOptions = async () => {
   }
 };
 getOptions();
+
+// 监听级联父级的变化
+if (attrs.cascadeParentField) {
+  watch(() => form.value![attrs.cascadeParentField as string], () => {
+    value.value = undefined;
+    getOptions();
+  });
+}
 
 // 全选 Checkbox 状态
 const checkAll = ref(false);
@@ -73,9 +83,9 @@ const VNodes = defineComponent({
     <template #dropdownRender="{ menuNode }">
       <template v-if="attrs.selectAllEnable && attrs.mode === 'multiple'">
         <a-checkbox class="px-2 py-1"
-                    v-model:checked="checkAll"
-                    :indeterminate="isIndeterminate"
-                    @change="handleCheckAllChange">全选
+          v-model:checked="checkAll"
+          :indeterminate="isIndeterminate"
+          @change="handleCheckAllChange">全选
         </a-checkbox>
         <a-divider class="my-1" />
       </template>
