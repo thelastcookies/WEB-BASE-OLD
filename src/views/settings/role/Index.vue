@@ -80,14 +80,14 @@ const batchDelete = async (ids: string[]) => {
 </script>
 
 <template>
-  <div class="w-full h-full p-3">
+  <div class="w-full h-full p-3 flex flex-col">
     <QueryForm
       class="py-2"
       :fields="roleTableSearchFields"
       v-model:form="qForm"
       @query="onQuery"
     />
-    <div class="h-[calc(100%-60px)]">
+    <div class="flex-1">
       <a-table
         row-key="Id"
         :columns="roleTableColumns" :data-source="list"

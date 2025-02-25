@@ -98,7 +98,7 @@ const handleSubmit = async () => {
 
 <template>
   <div class="w-full h-full p-3 flex gap-3">
-    <div class="w-50% bg-ant.bg-container rounded-ant.br p-3">
+    <div class="w-50% bg-ant.bg-container rounded-ant.br p-3 flex flex-col">
       <QueryForm
         class="py-2"
         :item-in-line="2"
@@ -106,7 +106,7 @@ const handleSubmit = async () => {
         v-model:form="qForm"
         @query="onQuery"
       />
-      <div class="h-[calc(100%-60px)]">
+      <div class="flex-1">
         <a-table
           row-key="Id"
           :columns="roleTableCols" :data-source="roleList"
