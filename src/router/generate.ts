@@ -83,7 +83,7 @@ const actionToRoute = (action: TreeNode<ActionRecordRaw>): RouteRecordRaw => {
   if (action.type === MenuTypeEnum.PAGE) {
     route.component = getRouterModule(action.resource);
   } else if (action.type === MenuTypeEnum.MENU) {
-    route.redirect = 'redirect' in action ? action.redirect : {
+    route.redirect = action.redirect ?? {
       name: findDescendantWithUrlDefined(action)?.actionId as RouteRecordName,
     };
   } else if (action.type === MenuTypeEnum.IFRAME) {

@@ -25,7 +25,7 @@ onUnmounted(() => {
 const routes = computed(() => {
   return breadcrumb.value.map(item => {
     return {
-      path: '',
+      path: item.url,
       breadcrumbName: item.title,
     };
   });
