@@ -37,34 +37,19 @@ const ITEM_IN_LINE = deviceType === 'desktop' ? props.itemInLine : 1;
 const SPAN = 24 / ITEM_IN_LINE;
 
 const formRef = ref<FormInstance>();
-const queryForm = ref<Record<string, any>>({});
-
-watch(form, () => {
-  queryForm.value = Object.assign({}, form.value);
-}, { immediate: true, deep: true });
 
 const onFinish = () => {
   try {
     const query: any = {};
     if (props.allFields) {
       props.fields.forEach((item) => {
-        query[item.field] = queryForm.value[item.field] ? queryForm.value[item.field] :
+        query[item.field] = form.value[item.field] ? form.value[item.field] :
           ['Input', 'Radio', 'DatePicker'].includes(item.component) ? '' :
             ['Select', 'TreeSelect', 'Checkbox', 'RangePicker'].includes(item.component) ? [] : undefined;
       });
-    } else {
-      for (const item in queryForm.value) {
-        if (
-          (typeof queryForm.value[item] === 'string' && queryForm.value[item]) ||
-          (queryForm.value[item] instanceof Array && queryForm.value[item].length) ||
-          (queryForm.value[item] instanceof Object && Object.keys(queryForm.value[item]).length)
-        ) {
-          query[item] = queryForm.value[item];
-        }
-      }
+      form.value = query;
     }
-    form.value = query;
-    emit('query', query);
+    emit('query', form.value);
   } catch (e) {
     console.error(`QueryForm: 'onFinish'`, e);
   }
@@ -91,6 +76,7 @@ const btnGroupOffset = computed(() => {
  **/
 const handleClear = () => {
   formRef.value!.resetFields();
+  form.value = {};
   emit('query', {});
 };
 
@@ -104,7 +90,7 @@ const handleClear = () => {
     :labelCol="{span: 6}"
     :wrapperCol="{span: 18}"
     :hideRequiredMark="true"
-    :model="queryForm"
+    :model="form"
     :rules="rules"
     @finish="onFinish"
     @finishFailed="onFinishFailed"
@@ -121,29 +107,29 @@ const handleClear = () => {
             help=""
           >
             <template v-if="item.component === 'Input'">
-              <a-input v-bind="item.compProps" v-model:value="queryForm[item.field]">
+              <a-input v-bind="item.compProps" v-model:value="form[item.field]">
                 <template #suffix>
                   <BaseIcon class="c-black/25" icon="i-mdi-magnify" />
                 </template>
               </a-input>
             </template>
             <template v-else-if="item.component === 'Select'">
-              <BaseSelect v-bind="item.compProps" v-model:value="queryForm[item.field]" />
+              <BaseSelect v-bind="item.compProps" v-model:value="form[item.field]" />
             </template>
             <template v-else-if="item.component === 'TreeSelect'">
-              <BaseTreeSelect v-bind="item.compProps" v-model:value="queryForm[item.field]" />
+              <BaseTreeSelect v-bind="item.compProps" v-model:value="form[item.field]" />
             </template>
             <template v-else-if="item.component === 'Radio'">
-              <a-radio-group v-bind="item.compProps" v-model:value="queryForm[item.field]" />
+              <a-radio-group v-bind="item.compProps" v-model:value="form[item.field]" />
             </template>
             <template v-else-if="item.component === 'Checkbox'">
-              <BaseCheckbox v-bind="item.compProps" v-model:value="queryForm[item.field]" />
+              <BaseCheckbox v-bind="item.compProps" v-model:value="form[item.field]" />
             </template>
             <template v-else-if="item.component === 'DatePicker'">
-              <a-date-picker v-bind="item.compProps" v-model:value="queryForm[item.field]" />
+              <a-date-picker v-bind="item.compProps" v-model:value="form[item.field]" />
             </template>
             <template v-else-if="item.component === 'RangePicker'">
-              <a-range-picker v-bind="item.compProps" v-model:value="queryForm[item.field]" />
+              <a-range-picker v-bind="item.compProps" v-model:value="form[item.field]" />
             </template>
           </a-form-item>
         </a-col>
