@@ -18,7 +18,13 @@ export const routeTo = (props: RouteToRecordRaw) => {
       // 如果是菜单页面，则找寻其直系子节点，直到某一个子节点配置了可跳转的页面
       const descendant = findDescendantWithUrlDefined(action);
       if (descendant) {
-        resolve(routeTo({ name: descendant.actionId as RecordName }));
+        let dst;
+        if (typeof props === 'object') {
+          dst = { ...props, name: descendant.actionId as RecordName };
+        } else {
+          dst = descendant.actionId as RecordName;
+        }
+        resolve(routeTo(dst));
       } else {
         reject(Error(`Router.navigate "routeTo": Cannot find any descendants with 'url' attribute defined in the action with id: ${String(actionId)}.`));
       }
